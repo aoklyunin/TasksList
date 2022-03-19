@@ -17,7 +17,7 @@ import static java.util.Objects.isNull;
 
 @AllArgsConstructor
 @Service
-public class DefaultUsersService implements TasksService{
+public class DefaultTasksService implements TasksService{
 
     // Хранилище клиентов
     private static final Map<Integer, Tasks> Task_REPOSITORY_MAP = new HashMap<>();
