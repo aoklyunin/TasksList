@@ -34,4 +34,6 @@ public class Tasks {
      * Текст
      */
     private String text;
+
+
 }
