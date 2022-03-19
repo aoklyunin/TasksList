@@ -1,9 +1,7 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.TasksDto;
 import com.example.demo.entities.Tasks;
 import com.example.demo.service.TasksService;
-import lombok.AllArgsConstructor;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,8 +10,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicLong;
-
 @RestController
 @RequestMapping("/tasks")
 @Log
