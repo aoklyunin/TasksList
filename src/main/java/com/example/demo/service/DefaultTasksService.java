@@ -16,20 +16,20 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 @AllArgsConstructor
 @Service
-public class DefaultTasksService implements TasksService{
+public class DefaultTasksService implements TasksService {
     /**
-     *  Хранилище задач
+     * Хранилище задач
      */
     private static final Map<Integer, Tasks> TASK_REPOSITORY_MAP = new HashMap<>();
 
     /**
      * Генератор id
      */
-    private static final AtomicInteger TASK_ID_HOLDER = new AtomicInteger();
+    private static final AtomicInteger TASK_ID_GENERATOR = new AtomicInteger();
 
     @Override
     public void create(Tasks task) {
-        final int TaskId = TASK_ID_HOLDER.incrementAndGet();
+        final int TaskId = TASK_ID_GENERATOR.incrementAndGet();
         task.setId(TaskId);
         TASK_REPOSITORY_MAP.put(TaskId, task);
     }
