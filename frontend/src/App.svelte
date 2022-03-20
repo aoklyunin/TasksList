@@ -9,6 +9,5 @@
 	import Sidenav from './app/component/Sidenav.svelte';
 </script>
 
-
-<Sidenav class="sidenav" />
+<Sidenav />
 <Router />

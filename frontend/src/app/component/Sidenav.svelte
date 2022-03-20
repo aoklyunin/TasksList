@@ -20,7 +20,6 @@
       isOpen = event.detail.isOpen;
     }
 </script>
-
 <Navbar color="light" light expand="md">
   <NavbarBrand href="/">sveltestrap</NavbarBrand>
   <NavbarToggler on:click={() => (isOpen = !isOpen)} />
