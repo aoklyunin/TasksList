@@ -1,31 +1,22 @@
 package com.example.demo.service;
 
 import com.example.demo.entities.Tasks;
-import lombok.AllArgsConstructor;
+import com.example.demo.repository.TasksRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
 
 
 /**
- * Сервис задачи по умолчанию
+ * Сервис задач по умолчанию
  */
-@AllArgsConstructor
 @Service
 public class DefaultTasksService implements TasksService {
     /**
-     * Хранилище задач
+     * Репозиторий базы данных задач
      */
-    private static final Map<Integer, Tasks> TASK_REPOSITORY_MAP = new HashMap<>();
-
-    /**
-     * Генератор id
-     */
-    private static final AtomicInteger TASK_ID_GENERATOR = new AtomicInteger();
+    private final TasksRepository tasksRepository;
 
     /**
      * Создает новую задачу
@@ -34,9 +25,17 @@ public class DefaultTasksService implements TasksService {
      */
     @Override
     public void create(Tasks task) {
-        final int TaskId = TASK_ID_GENERATOR.incrementAndGet();
-        task.setId(TaskId);
-        TASK_REPOSITORY_MAP.put(TaskId, task);
+        tasksRepository.save(task);
+    }
+
+    /**
+     * Конструктор сервиса задач
+     *
+     * @param tasksRepository репозиторий збд задач
+     */
+    @Autowired
+    public DefaultTasksService(TasksRepository tasksRepository) {
+        this.tasksRepository = tasksRepository;
     }
 
     /**
@@ -46,7 +45,7 @@ public class DefaultTasksService implements TasksService {
      */
     @Override
     public List<Tasks> readAll() {
-        return new ArrayList<>(TASK_REPOSITORY_MAP.values());
+        return tasksRepository.findAll();
     }
 
     /**
@@ -57,7 +56,7 @@ public class DefaultTasksService implements TasksService {
      */
     @Override
     public Tasks read(int id) {
-        return TASK_REPOSITORY_MAP.get(id);
+        return tasksRepository.getById(id);
     }
 
     /**
@@ -70,12 +69,14 @@ public class DefaultTasksService implements TasksService {
      */
     @Override
     public boolean update(Tasks task, int id) {
-        // если в словаре есть указанный `id`
-        if (TASK_REPOSITORY_MAP.containsKey(id)) {
-            // задаём задаче этот id
+        // если существует задача с таким id
+        if (tasksRepository.existsById(id)) {
+            // меняем id у задачи
             task.setId(id);
-            // помещаем новую задачу в словарь
-            TASK_REPOSITORY_MAP.put(id, task);
+            // при сохранении в базу данных будет найдена запись с таким же
+            // id, как у сохраняемого, после чего все поля записи будут приведены в
+            // соответствие с полями переданного объекта
+            tasksRepository.save(task);
             return true;
         }
 
@@ -90,8 +91,13 @@ public class DefaultTasksService implements TasksService {
      */
     @Override
     public boolean delete(int id) {
-        return TASK_REPOSITORY_MAP.remove(id) != null;
+        // если существует задача с таким id
+        if (tasksRepository.existsById(id)) {
+            // удаляем её
+            tasksRepository.deleteById(id);
+            return true;
+        }
+        return false;
     }
-
 
 }
