@@ -1,0 +1,13 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head"></head>
+<body>
+<h1 th:utext="${title}">..!..</h1>
+<h2 th:utext="${message}">..!..</h2>
+
+<a th:href="@{/taskList}">Список задач</a>
+
+<div th:replace="fragments/footer :: footer"></div>
+
+</body>
+</html>

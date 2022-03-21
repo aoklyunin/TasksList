@@ -4,8 +4,11 @@ import com.example.demo.entities.Tasks;
 import com.example.demo.service.TasksService;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -31,6 +34,8 @@ public class TasksController {
     public TasksController(TasksService tasksService) {
         this.tasksService = tasksService;
     }
+
+
 
     /**
      * Создать задачу
