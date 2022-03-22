@@ -10,11 +10,15 @@
         <th>Заголовок</th>
         <th>Текст</th>
         <th>Автор</th>
+        <th></th>
     </tr>
     <tr th:each="task : ${tasks}">
         <td th:utext="${task.title}">...</td>
         <td th:utext="${task.text}">...</td>
         <td th:utext="${task.author}">...</td>
+        <td>
+            <button class="btn-delete" th:id="${task.id}">Удалить</button>
+        </td>
     </tr>
 </table>
 
@@ -57,6 +61,14 @@
 
 <div th:replace="fragments/footer :: footer"></div>
 
+<script>
+    $(document).ready(function() {
+        // здесь код скрипта, где в $ будет находиться объект, предоставляющий доступ к функциям jQuery
+        $(".btn-delete").click(function(event) {
+            alert("Hello world!");
+        });
+    });
+</script>
 
 </body>
 </html>
