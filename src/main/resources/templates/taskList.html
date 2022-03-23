@@ -62,10 +62,13 @@
 <div th:replace="fragments/footer :: footer"></div>
 
 <script>
-    $(document).ready(function() {
+    $(document).ready(function () {
         // здесь код скрипта, где в $ будет находиться объект, предоставляющий доступ к функциям jQuery
-        $(".btn-delete").click(function(event) {
-            alert("Hello world!");
+        $(".btn-delete").click(function (event) {
+            $.post("/tasks/delete/" + event.target.id, {}, function (data) {
+                // перезагружаем страницу
+                location.reload()
+            });
         });
     });
 </script>
