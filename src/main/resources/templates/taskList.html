@@ -1,65 +1,159 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragments/head :: head"></head>
-<body class="well">
-<h1 th:utext="${title}">..!..</h1>
-<h2 th:utext="${message}">..!..</h2>
+<body class="well d-flex flex-column min-vh-100">
 
-<table border="1">
-    <tr>
-        <th>Заголовок</th>
-        <th>Текст</th>
-        <th>Автор</th>
-        <th></th>
-    </tr>
-    <tr th:each="task : ${tasks}">
-        <td th:utext="${task.title}">...</td>
-        <td th:utext="${task.text}">...</td>
-        <td th:utext="${task.author}">...</td>
-        <td>
-            <button class="btn-delete" th:id="${task.id}">Удалить</button>
-        </td>
-    </tr>
-</table>
+<header class="p-3 bg-dark text-white">
+    <div class="container">
+        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+            <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
+                <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap">
+                    <use xlink:href="#bootstrap"></use>
+                </svg>
+            </a>
 
-<br>
-<br>
+            <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+                <li><a href="/" class="nav-link px-2 text-white">Главная</a></li>
+                <li><a href="/taskList" class="nav-link px-2 text-secondary">Список задач</a></li>
+                <li><a href="#" class="nav-link px-2 text-white">Контакты</a></li>
+            </ul>
 
-<form th:action="@{/addTask}"
-      th:object="${taskForm}" method="POST">
-    <table>
-        <tr>
-            <th>Заголовок</th>
-            <td>
-                <input type="text" th:field="*{title}"/>
-            </td>
-        </tr>
-        <tr>
-            <th>Текст</th>
-            <td>
-                <input type="text" th:field="*{text}"/>
-            </td>
-        </tr>
-        <tr>
-            <th>Автор</th>
-            <td>
-                <input type="text" th:field="*{author}"/>
-            </td>
-        </tr>
-        <tr>
-            <td colspan="2" align="center">
-                <input type="submit" value="Добавить"/>
-            </td>
-        </tr>
-    </table>
-</form>
 
-<div th:if="${errorMessage}" th:utext="${errorMessage}"
-     style="color:red;font-style:italic;">
-    ...
+            <button type="button" class="btn btn-outline-light me-2">Вход</button>
+            <button type="button" class="btn btn-warning">Регистрация</button>
+        </div>
+    </div>
+</header>
+
+<main>
+
+    <section class="py-5 text-center container">
+        <div class="row py-lg-5">
+            <div class="col-lg-6 col-md-8 mx-auto">
+                <h1 th:utext="${title}">..!..</h1>
+                <p class="lead text-muted" th:utext="${message}">..!..</p>
+                <p>
+                    <button type="button" class="btn btn-primary my-2" data-bs-toggle="modal"
+                            data-bs-target="#exampleModal">
+                        Добавить задачу
+                    </button>
+                    <a href="/" class="btn btn-secondary my-2">На главную</a>
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <div class="album py-5 bg-light">
+        <div class="container">
+            <div class="row" >
+                <div class="col-8">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>Заголовок</th>
+                            <th>Текст</th>
+                            <th>Автор</th>
+                            <th>Удаление</th>
+                        </tr>
+                        </thead>
+                        <tr th:each="task : ${tasks}">
+                            <td th:utext="${task.title}">...</td>
+                            <td th:utext="${task.text}">...</td>
+                            <td th:utext="${task.author}">...</td>
+                            <td>
+                                <button class="btn btn-danger btn-delete" th:id="${task.id}">Удалить</button>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="col">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div th:if="${errorMessage}" th:utext="${errorMessage}"
+         style="color:red;font-style:italic;">
+        ...
+    </div>
+
+</main>
+
+
+<footer class="bg-dark text-center text-white mt-auto">
+    <!-- Grid container -->
+    <div class="container p-4 pb-0">
+        <!-- Section: CTA -->
+        <section class="">
+            <p class="d-flex justify-content-center align-items-center">
+                <span class="me-3">Это демонстрационный сайт </span>
+                <button type="button" class="btn btn-outline-light btn-rounded">
+                    Регистрация
+                </button>
+            </p>
+        </section>
+        <!-- Section: CTA -->
+    </div>
+    <!-- Grid container -->
+
+    <!-- Copyright -->
+    <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+        © 2022 Copyright:
+        <a class="text-white" href="https://ege.buran.rest/docs/project/web/view">Буран</a>
+    </div>
+    <!-- Copyright -->
+
+    <div th:replace="fragments/footer :: footer"></div>
+</footer>
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form th:action="@{/addTask}"
+                  th:object="${taskForm}" method="POST">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Новая задача</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <table align="center">
+                        <tr>
+                            <th>Заголовок</th>
+                            <td>
+                                <input class="form-control" type="text" th:field="*{title}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Текст</th>
+                            <td>
+                                <input class="form-control" type="text" th:field="*{text}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Автор</th>
+                            <td>
+                                <input class="form-control" type="text" th:field="*{author}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" align="center">
+                            </td>
+                        </tr>
+                    </table>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                    <input type="submit" class="btn btn-primary" value="Добавить"/>
+                </div>
+
+            </form>
+        </div>
+    </div>
 </div>
 
-<div th:replace="fragments/footer :: footer"></div>
 
 <script>
     $(document).ready(function () {
