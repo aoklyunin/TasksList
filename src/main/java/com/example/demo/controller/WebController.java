@@ -38,6 +38,10 @@ public class WebController {
      * Заголовок на странице списка
      */
     private static final String LIST_PAGE_TITLE = "Список задач";
+    /**
+     * Заголовок на странице списка
+     */
+    private static final String EDIT_PAGE_TITLE = "Редактирование задачи";
 
     /**
      * Сервис задач
@@ -77,10 +81,66 @@ public class WebController {
     }
 
     /**
+     * Посмотреть задачу
+     *
+     * @param model - модель
+     * @return - возвращает путь к шаблону
+     */
+    @GetMapping(value = {"/tasks/{id}"})
+    public String showTask(Model model, @PathVariable(name = "id") int id) {
+        // читаем все задачи
+        Tasks task = tasksService.read(id);
+        // задаём сообщение
+        model.addAttribute("message", "Задача: " + id);
+        // задаём заголовок
+        model.addAttribute("title", EDIT_PAGE_TITLE);
+        // добавляем фому
+        TaskForm taskForm = new TaskForm();
+        taskForm.setText(task.getText());
+        taskForm.setAuthor(task.getAuthor());
+        taskForm.setTitle(task.getTitle());
+        model.addAttribute("taskForm", taskForm);
+        model.addAttribute("taskId", id);
+        return "taskEdit";
+    }
+
+    /**
+     * Изменить задачу
+     *
+     * @param model    - модель
+     * @param taskForm - форма с задачей
+     * @return - возвращает путь к шаблону
+     */
+    @PostMapping(value = {"/tasks/{id}"})
+    public String saveTask(Model model, @ModelAttribute("taskForm") TaskForm taskForm,
+                           @PathVariable(name = "id") int id) {
+        // получаем значения из формы
+        String author = taskForm.getAuthor();
+        String text = taskForm.getText();
+        String title = taskForm.getTitle();
+
+        // если все элементы формы получены и непустые
+        if (author != null && author.length() > 0 && text != null && text.length() > 0 && title != null && title.length() > 0) {
+            // создаём новую задачу
+            Tasks task = new Tasks();
+            task.setAuthor(author);
+            task.setText(text);
+            task.setTitle(title);
+            // добавляем задачу в БД
+            tasksService.update(task, id);
+            // переходим к списку задач
+            return "redirect:/taskList";
+        }
+
+        model.addAttribute("errorMessage", "Форма заполнена некорректно");
+        return "redirect:/taskList";
+    }
+
+    /**
      * Добавить задачу
      *
      * @param model    - модель
-     * @param taskForm
+     * @param taskForm - форма с новой задачей
      * @return - возвращает путь к шаблону
      */
     @PostMapping(value = {"/addTask"})
@@ -104,7 +164,7 @@ public class WebController {
         }
 
         model.addAttribute("errorMessage", "Форма заполнена некорректно");
-        return "taskList";
+        return "redirect:/taskList";
     }
 
     /**

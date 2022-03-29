@@ -54,14 +54,20 @@
                             <th>Текст</th>
                             <th>Автор</th>
                             <th>Удаление</th>
+                            <th>Редактирование</th>
                         </tr>
                         </thead>
                         <tr th:each="task : ${tasks}">
-                            <td th:utext="${task.title}">...</td>
+                            <td th:utext="${task.title}">...</td></a>
                             <td th:utext="${task.text}">...</td>
                             <td th:utext="${task.author}">...</td>
                             <td>
                                 <button class="btn btn-danger btn-delete" th:id="${task.id}">Удалить</button>
+                            </td>
+                            <td>
+                                <a th:href="@{/tasks/{id}(id=${task.id})}">
+                                <button class="btn btn-info">Редактировать</button>
+                                </a>
                             </td>
                         </tr>
                     </table>
@@ -72,9 +78,8 @@
         </div>
     </div>
 
-    <div th:if="${errorMessage}" th:utext="${errorMessage}"
-         style="color:red;font-style:italic;">
-        ...
+    <div th:if="${errorMessage}" th:utext="${errorMessage}" class="alert alert-danger" role="alert">
+        ...!...
     </div>
 
 </main>
