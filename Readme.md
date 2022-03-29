@@ -1,6 +1,9 @@
-## Веб-Сервер
+## Bootstrap Веб-Сервер
 
-Это пример простейшего веб-сервера на Java+Spring.
+Это пример простейшего веб-сервера на Java+Spring+Bootstrap.
+
+
+![cmd](src/main/resources/img/index.png)
 
 Чтобы его запустить, необходимо создать файл настроек
 `application.properties` в папке `resources`
@@ -58,6 +61,7 @@ spring.datasource.driverClassName=org.postgresql.Driver
 ```
 </TabItem>
 </Tabs>
+
 
 
 
