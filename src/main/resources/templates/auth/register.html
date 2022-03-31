@@ -1,114 +1,45 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragments/head :: head"></head>
-<body class="well d-flex flex-column min-vh-100">
 
-<header class="p-3 bg-dark text-white">
-    <div class="container">
-        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-            <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
-                <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap">
-                    <use xlink:href="#bootstrap"></use>
-                </svg>
-            </a>
+<body class="text-center sign-in-body well">
 
-            <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-                <li><a href="/" class="nav-link px-2 text-white">Главная</a></li>
-                <li><a href="/taskList" class="nav-link px-2 text-white">Список задач</a></li>
-                <li><a href="#" class="nav-link px-2 text-white">Контакты</a></li>
-            </ul>
+<main class="form-signin">
+    <well class="form-signin">
+        <form th:action="@{/auth/register}"
+              th:object="${registerForm}" method="POST">
+            <img class="mb-4" th:src="@{/img/bootstrap-logo.svg}" alt="" width="72" height="57">
+            <h1 th:utext="${title}">..!..</h1>
+            <p class="lead" th:utext="${message}">...!...</p>
 
-            <button type="button" class="btn btn-outline-light me-2">Вход</button>
-            <button type="button" class="btn btn-warning">Регистрация</button>
-        </div>
-    </div>
-</header>
-
-<main>
-    <section class="py-5 text-center container">
-        <div class="row py-lg-5">
-            <div class="col-lg-6 col-md-8 mx-auto">
-                <h1 th:utext="${title}">..!..</h1>
-                <p class="lead text-muted" th:utext="${message}">..!..</p>
-                <form th:action="@{/tasks/{id}(id=${taskId})}"
-                      th:object="${taskForm}" method="POST">
-                        <table align="center">
-                            <tr>
-                                <th>Заголовок</th>
-                                <td>
-                                    <input class="form-control" type="text" th:field="*{title}"/>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>Текст</th>
-                                <td>
-                                    <input class="form-control" type="text" th:field="*{text}"/>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>Автор</th>
-                                <td>
-                                    <input class="form-control" type="text" th:field="*{author}"/>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colspan="2" align="center">
-                                </td>
-                            </tr>
-                        </table>
-                    <br>
-                    <input type="submit" class="btn btn-primary" value="Изменить"/>
-                </form>
+            <div class="form-floating">
+                <input type="text" class="form-control" id="floatingInput" placeholder="username"
+                       th:field="*{username}">
+                <label for="floatingInput">Логин</label>
             </div>
-        </div>
-    </section>
+            <div class="form-floating">
+                <input type="password" class="form-control" id="floatingPasswordRep" placeholder="qwerty"
+                       th:field="*{passwordConfirm}">
+                <label for="floatingPasswordRep">Повторите пароль</label>
+            </div>
+            <div class="form-floating">
+                <input type="password" class="form-control" id="floatingPassword" placeholder="qwerty"
+                       th:field="*{password}">
+                <label for="floatingPassword">Пароль</label>
+            </div>
+            <div class="form-floating">
+                <input type="password" class="form-control" id="registerCode" placeholder="qwe123"
+                       th:field="*{code}">
+                <label for="registerCode">Код регистрации*</label>
+            </div>
 
-
-    <div th:if="${errorMessage}" th:utext="${errorMessage}" class="alert alert-danger" role="alert">
-        ...!...
-    </div>
-
+            <button class="w-100 btn btn-lg btn-primary" type="submit">Зарегистрироваться</button>
+            <p class="mt-5 text-muted">*Если Вы не знаете код регистрации, оставьте
+            это поле пустым</p>
+            <p class="mt-5 mb-3 text-muted">© 2022</p>
+        </form>
+    </well>
 </main>
-
-
-<footer class="bg-dark text-center text-white mt-auto">
-    <!-- Grid container -->
-    <div class="container p-4 pb-0">
-        <!-- Section: CTA -->
-        <section class="">
-            <p class="d-flex justify-content-center align-items-center">
-                <span class="me-3">Это демонстрационный сайт </span>
-                <button type="button" class="btn btn-outline-light btn-rounded">
-                    Регистрация
-                </button>
-            </p>
-        </section>
-        <!-- Section: CTA -->
-    </div>
-    <!-- Grid container -->
-
-    <!-- Copyright -->
-    <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
-        © 2022 Copyright:
-        <a class="text-white" href="https://ege.buran.rest/docs/project/web/view">Буран</a>
-    </div>
-    <!-- Copyright -->
-
-    <div th:replace="fragments/footer :: footer"></div>
-</footer>
-
-
-<script>
-    $(document).ready(function () {
-        // здесь код скрипта, где в $ будет находиться объект, предоставляющий доступ к функциям jQuery
-        $(".btn-delete").click(function (event) {
-            $.post("/tasks/delete/" + event.target.id, {}, function (data) {
-                // перезагружаем страницу
-                location.reload()
-            });
-        });
-    });
-</script>
 
 </body>
 </html>

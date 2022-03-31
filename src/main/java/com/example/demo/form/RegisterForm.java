@@ -10,18 +10,21 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserForm {
+public class RegisterForm {
     /**
-     * Заголовок
+     * Имя пользователя
      */
-    private String title;
+    private String username;
     /**
-     * Автор
+     * Пароль
      */
-    private String author;
+    private String password;
     /**
-     * Текст
+     * Подтверждение пароля
      */
-    private String text;
-
+    private String passwordConfirm;
+    /**
+     * Код регистрации
+     */
+    private String code;
 }
