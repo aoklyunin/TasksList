@@ -68,7 +68,7 @@
                         <tr th:each="task : ${tasks}">
                             <td th:utext="${task.title}">...</td></a>
                             <td th:utext="${task.text}">...</td>
-                            <td th:utext="${task.author}">...</td>
+                            <td th:utext="${task.author.username}">...</td>
                             <td>
                                 <button class="btn btn-danger btn-delete" th:id="${task.id}">Удалить</button>
                             </td>
@@ -119,17 +119,10 @@
                             </td>
                         </tr>
                         <tr>
-                            <th>Автор</th>
-                            <td>
-                                <input class="form-control" type="text" th:field="*{author}"/>
-                            </td>
-                        </tr>
-                        <tr>
                             <td colspan="2" align="center">
                             </td>
                         </tr>
                     </table>
-
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>

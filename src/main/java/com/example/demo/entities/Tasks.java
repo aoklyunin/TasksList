@@ -29,11 +29,11 @@ public class Tasks {
     /**
      * Автор
      */
-    private String author;
+    @ManyToOne
+    @JoinColumn(name="user_id", nullable=false)
+    private User author;
     /**
      * Текст
      */
     private String text;
-
-
 }

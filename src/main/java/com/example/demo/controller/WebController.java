@@ -1,10 +1,12 @@
 package com.example.demo.controller;
 
 import com.example.demo.entities.Tasks;
+import com.example.demo.entities.User;
 import com.example.demo.form.TaskForm;
 import com.example.demo.service.TasksService;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -67,15 +70,26 @@ public class WebController {
     /**
      * Cтраница списка задач доступна по адресу `taskList`,
      *
-     * @param model - модель
+     * @param model          - модель
+     * @param authentication - данные аутентификации
      * @return - возвращает путь к шаблону
      */
     @GetMapping(value = {"/taskList"})
-    public String tasksList(Model model) {
-        // читаем все задачи
-        final List<Tasks> tasks = tasksService.readAll();
-        // добавляем их в список
-        model.addAttribute("tasks", tasks);
+    public String tasksList(Model model, Authentication authentication) {
+        // получаем пользователя
+        User currentUser = (User) authentication.getPrincipal();
+
+        // если он существует
+        if (currentUser != null) {
+            // читаем все задачи пользователя
+            final List<Tasks> tasks = tasksService.readAll().stream().filter(
+                    t -> t.getAuthor().getId().equals(currentUser.getId())
+            ).toList();
+            // добавляем множество его задач
+            model.addAttribute("tasks", tasks);
+        } else
+            // иначе добавляем пустое множество
+            model.addAttribute("tasks", new HashSet<>());
         // задаём сообщение
         model.addAttribute("message", LIST_PAGE_MESSAGE);
         // задаём заголовок
@@ -89,13 +103,20 @@ public class WebController {
     /**
      * Посмотреть задачу
      *
-     * @param model - модель
+     * @param model          - модель
+     * @param authentication - данные аутентификации
      * @return - возвращает путь к шаблону
      */
     @GetMapping(value = {"/tasks/{id}"})
-    public String showTask(Model model, @PathVariable(name = "id") int id) {
+    public String showTask(Model model, @PathVariable(name = "id") int id, Authentication authentication) {
+        // получаем пользователя
+        User currentUser = (User) authentication.getPrincipal();
         // читаем все задачи
         Tasks task = tasksService.read(id);
+        // если пользователь не является автором рассматриваемой заметки
+        if (!task.getAuthor().equals(currentUser))
+            // перенаправляем его к списку задач
+            return "redirect:/taskList";
         // задаём сообщение
         model.addAttribute("message", "Задача: " + id);
         // задаём заголовок
@@ -103,7 +124,6 @@ public class WebController {
         // добавляем фому
         TaskForm taskForm = new TaskForm();
         taskForm.setText(task.getText());
-        taskForm.setAuthor(task.getAuthor());
         taskForm.setTitle(task.getTitle());
         model.addAttribute("taskForm", taskForm);
         model.addAttribute("taskId", id);
@@ -119,17 +139,17 @@ public class WebController {
      */
     @PostMapping(value = {"/tasks/{id}"})
     public String saveTask(Model model, @ModelAttribute("taskForm") TaskForm taskForm,
-                           @PathVariable(name = "id") int id) {
-        // получаем значения из формы
-        String author = taskForm.getAuthor();
+                           @PathVariable(name = "id") int id, Authentication authentication) {
+        // получаем пользователя
+        User currentUser = (User) authentication.getPrincipal();
         String text = taskForm.getText();
         String title = taskForm.getTitle();
 
         // если все элементы формы получены и непустые
-        if (author != null && author.length() > 0 && text != null && text.length() > 0 && title != null && title.length() > 0) {
+        if (currentUser != null && text != null && text.length() > 0 && title != null && title.length() > 0) {
             // создаём новую задачу
             Tasks task = new Tasks();
-            task.setAuthor(author);
+            task.setAuthor(currentUser);
             task.setText(text);
             task.setTitle(title);
             // добавляем задачу в БД
@@ -150,17 +170,18 @@ public class WebController {
      * @return - возвращает путь к шаблону
      */
     @PostMapping(value = {"/addTask"})
-    public String savePerson(Model model, @ModelAttribute("taskForm") TaskForm taskForm) {
+    public String savePerson(Model model, @ModelAttribute("taskForm") TaskForm taskForm, Authentication authentication) {
+        // получаем пользователя
+        User currentUser = (User) authentication.getPrincipal();
         // получаем значения из формы
-        String author = taskForm.getAuthor();
         String text = taskForm.getText();
         String title = taskForm.getTitle();
 
         // если все элементы формы получены и непустые
-        if (author != null && author.length() > 0 && text != null && text.length() > 0 && title != null && title.length() > 0) {
+        if (currentUser != null && text != null && text.length() > 0 && title != null && title.length() > 0) {
             // создаём новую задачу
             Tasks task = new Tasks();
-            task.setAuthor(author);
+            task.setAuthor(currentUser);
             task.setText(text);
             task.setTitle(title);
             // добавляем задачу в БД
@@ -188,6 +209,7 @@ public class WebController {
         // возвращаем шаблон главной страницы
         return "index";
     }
+
     /**
      * Главная страница доступна по адресам `/` и `/index`,
      *

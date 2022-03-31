@@ -29,6 +29,12 @@ public class User implements UserDetails {
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<Role> roles;
     /**
+     * Задачи пользователя
+     */
+    @Transient
+    @OneToMany(mappedBy="author", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Tasks> tasks;
+    /**
      * Имя пользователя
      */
     private String username;

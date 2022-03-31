@@ -16,12 +16,7 @@ public class TaskForm {
      */
     private String title;
     /**
-     * Автор
-     */
-    private String author;
-    /**
      * Текст
      */
     private String text;
-
 }
