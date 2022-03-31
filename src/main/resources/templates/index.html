@@ -11,7 +11,10 @@
             <nav class="nav nav-masthead justify-content-center float-md-end">
                 <a class="nav-link active" aria-current="page" href="#">Главная</a>
                 <a class="nav-link" th:href="@{/taskList}">Список задач</a>
-                <a class="nav-link" href="#">Контакты</a>
+                <a class="nav-link" href="/contact">Контакты</a>
+                <a sec:authorize="isAnonymous()" class="nav-link" href="/auth/login">Вход</a>
+                <a sec:authorize="isAnonymous()" class="nav-link" href="/auth/register">Регистрация</a>
+                <a sec:authorize="isAuthenticated()" class="nav-link" href="/logout">Выход</a>
             </nav>
         </div>
     </header>

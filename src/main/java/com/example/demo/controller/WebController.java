@@ -5,8 +5,6 @@ import com.example.demo.form.TaskForm;
 import com.example.demo.service.TasksService;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -42,6 +40,14 @@ public class WebController {
      * Заголовок на странице списка
      */
     private static final String EDIT_PAGE_TITLE = "Редактирование задачи";
+    /**
+     * Заголовок на странице списка
+     */
+    private static final String CONTACT_PAGE_TITLE = "Контакты";
+    /**
+     * Заголовок на странице списка
+     */
+    private static final String CONTACT_PAGE_MESSAGE = "Эта страница - заглушка";
 
     /**
      * Сервис задач
@@ -77,7 +83,7 @@ public class WebController {
         // добавляем фому
         TaskForm taskForm = new TaskForm();
         model.addAttribute("taskForm", taskForm);
-        return "taskList";
+        return "pages/taskList";
     }
 
     /**
@@ -101,7 +107,7 @@ public class WebController {
         taskForm.setTitle(task.getTitle());
         model.addAttribute("taskForm", taskForm);
         model.addAttribute("taskId", id);
-        return "taskEdit";
+        return "pages/taskEdit";
     }
 
     /**
@@ -181,6 +187,21 @@ public class WebController {
         model.addAttribute("title", MAIN_PAGE_TITLE);
         // возвращаем шаблон главной страницы
         return "index";
+    }
+    /**
+     * Главная страница доступна по адресам `/` и `/index`,
+     *
+     * @param model - модель
+     * @return - возвращает путь к шаблону
+     */
+    @GetMapping(value = {"/contact"})
+    public String contact(Model model) {
+        // задаём сообщение
+        model.addAttribute("message", CONTACT_PAGE_MESSAGE);
+        // задаём заголовок
+        model.addAttribute("title", CONTACT_PAGE_TITLE);
+        // возвращаем шаблон главной страницы
+        return "pages/contact";
     }
 
 }

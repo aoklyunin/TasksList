@@ -51,25 +51,28 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 // позволяет ограничивать запросы
                 .authorizeRequests()
                 //Доступ только для не зарегистрированных пользователей
-                .antMatchers("/auth/register").not().fullyAuthenticated()
+                .antMatchers("/auth/register", "/auth/login").not().fullyAuthenticated()
                 //Доступ только для пользователей с ролью Администратор
-                .antMatchers("/auth/admin/**").hasRole("ADMIN")
-                .antMatchers("/taskList").hasRole("USER")
-                //Доступ разрешен всем пользователей
-                .antMatchers("/", "/js/**", "/css/**", "/img/**").permitAll();
-//                //Все остальные страницы требуют аутентификации
-//                .anyRequest().authenticated()
-//                .and()
-//                //Настройка для входа в систему
-//                .formLogin()
-//                .loginPage("/auth/login")
-//                //Перенарпавление на главную страницу после успешного входа
-//                .defaultSuccessUrl("/")
-//                .permitAll()
-//                .and()
-//                .logout()
-//                .permitAll()
-//                .logoutSuccessUrl("/");
+                .antMatchers("/admin/**").hasRole("ADMIN")
+                //Доступ только для пользователей с ролью Пользователь
+                .antMatchers("/taskList", "/tasks/**").hasRole("USER")
+                //Доступ разрешен всем
+                .antMatchers("/", "/js/**", "/css/**", "/img/**", "/contact").permitAll()
+                //Все остальные страницы требуют аутентификации
+                .anyRequest().authenticated()
+                .and()
+                // Настройка для входа в систему
+                .formLogin()
+                // страница решистрации
+                .loginPage("/auth/login")
+                //Перенаправление на главную страницу после успешного входа
+                .defaultSuccessUrl("/")
+                .permitAll()
+                .and()
+                // настройка выхода
+                .logout()
+                .permitAll()
+                .logoutSuccessUrl("/");
     }
 
     /**

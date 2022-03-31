@@ -15,11 +15,21 @@
             <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
                 <li><a href="/" class="nav-link px-2 text-white">Главная</a></li>
                 <li><a href="/taskList" class="nav-link px-2 text-white">Список задач</a></li>
-                <li><a href="#" class="nav-link px-2 text-white">Контакты</a></li>
+                <li><a href="/contact" class="nav-link px-2 text-white">Контакты</a></li>
             </ul>
 
-            <button type="button" class="btn btn-outline-light me-2">Вход</button>
-            <button type="button" class="btn btn-warning">Регистрация</button>
+            <a sec:authorize="isAnonymous()" class="nav-link" href="/auth/login">
+                <button type="button" class="btn btn-outline-light me-2">Вход</button>
+            </a>
+            <a sec:authorize="isAnonymous()" class="nav-link" href="/auth/register">
+                <button type="button" class="btn btn-warning">Регистрация</button>
+            </a>
+            <a sec:authorize="isAuthenticated()" class="nav-link px-2 text-white" href="/taskList"
+               th:text="${#request.userPrincipal.getName()}">
+            </a>
+            <a sec:authorize="isAuthenticated()" class="nav-link" href="/logout">
+                <button type="button" class="btn btn-outline-light me-2">Выход</button>
+            </a>
         </div>
     </div>
 </header>
@@ -63,52 +73,12 @@
         </div>
     </section>
 
-
     <div th:if="${errorMessage}" th:utext="${errorMessage}" class="alert alert-danger" role="alert">
         ...!...
     </div>
-
 </main>
 
-
-<footer class="bg-dark text-center text-white mt-auto">
-    <!-- Grid container -->
-    <div class="container p-4 pb-0">
-        <!-- Section: CTA -->
-        <section class="">
-            <p class="d-flex justify-content-center align-items-center">
-                <span class="me-3">Это демонстрационный сайт </span>
-                <button type="button" class="btn btn-outline-light btn-rounded">
-                    Регистрация
-                </button>
-            </p>
-        </section>
-        <!-- Section: CTA -->
-    </div>
-    <!-- Grid container -->
-
-    <!-- Copyright -->
-    <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
-        © 2022 Copyright:
-        <a class="text-white" href="https://ege.buran.rest/docs/project/web/view">Буран</a>
-    </div>
-    <!-- Copyright -->
-
-    <div th:replace="fragments/footer :: footer"></div>
-</footer>
-
-
-<script>
-    $(document).ready(function () {
-        // здесь код скрипта, где в $ будет находиться объект, предоставляющий доступ к функциям jQuery
-        $(".btn-delete").click(function (event) {
-            $.post("/tasks/delete/" + event.target.id, {}, function (data) {
-                // перезагружаем страницу
-                location.reload()
-            });
-        });
-    });
-</script>
+<footer th:replace="fragments/non-main-footer :: footer"></footer>
 
 </body>
 </html>

@@ -24,6 +24,14 @@ public class AuthController {
      */
     private static final String REGISTER_PAGE_TITLE = "Регистрация";
     /**
+     * Сообщение на главной странице
+     */
+    private static final String LOGIN_PAGE_MESSAGE = "Введите данные";
+    /**
+     * Заголовок главной страницы
+     */
+    private static final String LOGIN_PAGE_TITLE = "Вход";
+    /**
      * Сервис для работы с пользователями
      */
     private final UserService userService;
@@ -90,10 +98,15 @@ public class AuthController {
     /**
      * Метод входа
      *
+     * @param model - модель
      * @return путь к шаблону
      */
     @RequestMapping("/login")
-    public String login() {
+    public String login(Model model) {
+        // задаём сообщение
+        model.addAttribute("message", LOGIN_PAGE_MESSAGE);
+        // задаём заголовок
+        model.addAttribute("title", LOGIN_PAGE_TITLE);
         return "auth/login";
     }
 
