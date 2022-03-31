@@ -1,9 +1,11 @@
 package com.example.demo.controller;
 
+import com.example.demo.entities.Role;
 import com.example.demo.entities.User;
 import com.example.demo.form.RegisterForm;
 import com.example.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -35,6 +37,11 @@ public class AuthController {
      * Сервис для работы с пользователями
      */
     private final UserService userService;
+    /**
+     * Код регистрации администратора
+     */
+    @Value("${admin.registerCode}")
+    private String adminRegisterCode;
 
     /**
      * Конструктор контроллера авторизации
@@ -86,8 +93,17 @@ public class AuthController {
         User user = new User();
         user.setPassword(registerForm.getPassword());
         user.setUsername(registerForm.getUsername());
+
+        // определяем роль пользователя
+        Role role;
+        // если код регистрации администратора введён верно
+        if (adminRegisterCode.equals(registerForm.getCode()))
+            role = new Role(1L, "ROLE_ADMIN");
+        else
+            role = new Role(2L, "ROLE_USER");
+
         // если не получилось создать пользователя в БД
-        if (!userService.saveUser(user)) {
+        if (!userService.saveUser(user, role)) {
             model.addAttribute("errorMessage", "Пользователь с таким именем уже существует");
             return "auth/register";
         }

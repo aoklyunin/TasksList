@@ -88,16 +88,17 @@ public class UserService implements UserDetailsService {
      * Сохранить пользователя
      *
      * @param user - пользователь
+     * @param role - роль
      * @return флаг, получилось ли сохранить
      */
-    public boolean saveUser(User user) {
+    public boolean saveUser(User user, Role role) {
         User userFromDB = userRepository.findByUsername(user.getUsername());
 
         if (userFromDB != null) {
             return false;
         }
 
-        user.setRoles(Collections.singleton(new Role(1L, "ROLE_USER")));
+        user.setRoles(Collections.singleton(role));
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         userRepository.save(user);
         return true;

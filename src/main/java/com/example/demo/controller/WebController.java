@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.entities.Role;
 import com.example.demo.entities.Tasks;
 import com.example.demo.entities.User;
 import com.example.demo.form.TaskForm;
@@ -81,10 +82,19 @@ public class WebController {
 
         // если он существует
         if (currentUser != null) {
-            // читаем все задачи пользователя
-            final List<Tasks> tasks = tasksService.readAll().stream().filter(
-                    t -> t.getAuthor().getId().equals(currentUser.getId())
-            ).toList();
+            List<Tasks> tasks = null;
+            // перебираем роли
+            for (Role role : currentUser.getRoles())
+                // если роль - администратор
+                if (role.getName().equals("ROLE_ADMIN"))
+                    // отправляем все задачи
+                    tasks = tasksService.readAll();
+            // если задачи не заполнены
+            if (tasks == null)
+                // заполняем задачами конкретного пользователя
+                tasks = tasksService.readAll().stream().filter(
+                        t -> t.getAuthor().getId().equals(currentUser.getId())
+                ).toList();
             // добавляем множество его задач
             model.addAttribute("tasks", tasks);
         } else
