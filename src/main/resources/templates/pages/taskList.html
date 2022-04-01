@@ -70,10 +70,12 @@
                             <td th:utext="${task.text}">...</td>
                             <td th:utext="${task.author.username}">...</td>
                             <td>
+                                <form th:action="@{/deleteTask/{id}(id=${task.id})}" method="POST">
                                 <button class="btn btn-danger btn-delete" th:id="${task.id}">Удалить</button>
+                                </form>
                             </td>
                             <td>
-                                <a th:href="@{/tasks/{id}(id=${task.id})}">
+                                <a th:href="@{/task/{id}(id=${task.id})}">
                                 <button class="btn btn-info">Редактировать</button>
                                 </a>
                             </td>
@@ -133,19 +135,6 @@
         </div>
     </div>
 </div>
-
-
-<script>
-    $(document).ready(function () {
-        // здесь код скрипта, где в $ будет находиться объект, предоставляющий доступ к функциям jQuery
-        $(".btn-delete").click(function (event) {
-            $.post("/tasks/delete/" + event.target.id, {}, function (data) {
-                // перезагружаем страницу
-                location.reload()
-            });
-        });
-    });
-</script>
 
 </body>
 </html>

@@ -117,7 +117,7 @@ public class WebController {
      * @param authentication - данные аутентификации
      * @return - возвращает путь к шаблону
      */
-    @GetMapping(value = {"/tasks/{id}"})
+    @GetMapping(value = {"/task/{id}"})
     public String showTask(Model model, @PathVariable(name = "id") int id, Authentication authentication) {
         // получаем пользователя
         User currentUser = (User) authentication.getPrincipal();
@@ -143,11 +143,12 @@ public class WebController {
     /**
      * Изменить задачу
      *
-     * @param model    - модель
-     * @param taskForm - форма с задачей
+     * @param model          - модель
+     * @param taskForm       - форма с задачей
+     * @param authentication - данные аутентификации
      * @return - возвращает путь к шаблону
      */
-    @PostMapping(value = {"/tasks/{id}"})
+    @PostMapping(value = {"/task/{id}"})
     public String saveTask(Model model, @ModelAttribute("taskForm") TaskForm taskForm,
                            @PathVariable(name = "id") int id, Authentication authentication) {
         // получаем пользователя
@@ -175,8 +176,9 @@ public class WebController {
     /**
      * Добавить задачу
      *
-     * @param model    - модель
-     * @param taskForm - форма с новой задачей
+     * @param model          - модель
+     * @param taskForm       - форма с новой задачей
+     * @param authentication - данные аутентификации
      * @return - возвращает путь к шаблону
      */
     @PostMapping(value = {"/addTask"})
@@ -235,5 +237,24 @@ public class WebController {
         // возвращаем шаблон главной страницы
         return "pages/contact";
     }
+
+    /**
+     * Удалить задачу
+     *
+     * @param id             - id задачи
+     * @param authentication - данные аутентификации
+     * @return - ответ на REST запрос
+     */
+    @PostMapping(value = "/deleteTask/{id}")
+    public String delete(@PathVariable(name = "id") int id, Authentication authentication) {
+        // получаем пользователя
+        User currentUser = (User) authentication.getPrincipal();
+        // если id автора задачи и пользователя совпадают и получилось удалить задачу
+        if (tasksService.read(id).getAuthor().getId().equals(currentUser.getId()) && tasksService.delete(id))
+            log.info("Задача с id=" + id + " удалена");
+        // переходим к списку задач
+        return "redirect:/taskList";
+    }
+
 
 }

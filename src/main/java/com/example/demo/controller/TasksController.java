@@ -1,14 +1,20 @@
 package com.example.demo.controller;
 
 import com.example.demo.entities.Tasks;
+import com.example.demo.entities.User;
 import com.example.demo.service.TasksService;
+import com.example.demo.service.UserService;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Контроллер задач
@@ -21,6 +27,10 @@ public class TasksController {
      * Сервис задач
      */
     private final TasksService tasksService;
+    /**
+     * Сервис задач
+     */
+    private final UserService userService;
 
     /**
      * Конструктор контроллера задач
@@ -28,10 +38,10 @@ public class TasksController {
      * @param tasksService сервис задач
      */
     @Autowired
-    public TasksController(TasksService tasksService) {
+    public TasksController(TasksService tasksService, UserService userService) {
         this.tasksService = tasksService;
+        this.userService = userService;
     }
-
 
 
     /**
@@ -45,6 +55,28 @@ public class TasksController {
         tasksService.create(task);
         log.info("Задача " + task.getTitle() + " создана");
         return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    /**
+     * Авторизация для REST-запросов
+     *
+     * @return пользователя
+     */
+    @PostMapping(path = "/login", produces = MediaType.APPLICATION_JSON_VALUE)
+    public @ResponseBody
+    User getAuthUser() {
+        // получаем объект авторизации
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        // если его нет, возвращаем null
+        if (auth == null) {
+            return null;
+        }
+        // получаем ссылку на пользователя из запроса
+        Object principal = auth.getPrincipal();
+        // если объект является экземпляром класса User, сохраняем его
+        User user = (principal instanceof User) ? (User) principal : null;
+        // возвращаем пользователя
+        return Objects.nonNull(user) ? (User) this.userService.loadUserByUsername(user.getUsername()) : null;
     }
 
     /**
