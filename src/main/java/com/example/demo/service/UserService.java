@@ -5,8 +5,6 @@ import com.example.demo.entities.User;
 import com.example.demo.repository.RoleRepository;
 import com.example.demo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -67,12 +65,12 @@ public class UserService implements UserDetailsService {
     /**
      * Получить пользователя по его имени
      *
-     * @param username - имя
+     * @param tusername - имя
      * @return пользователь
      * @throws UsernameNotFoundException - исключение, если пользователь не найден
      */
-    public UserDetails loadUserByTUsername(String username) throws UsernameNotFoundException {
-        List<User> users = userRepository.findAllByTUsername(username);
+    public UserDetails loadUserByTUsername(String tusername) throws UsernameNotFoundException {
+        List<User> users = userRepository.findAllByTUsername(tusername);
         if (users == null || users.isEmpty()) {
             throw new UsernameNotFoundException("User not found");
         }
@@ -115,6 +113,19 @@ public class UserService implements UserDetailsService {
 
         user.setRoles(Collections.singleton(role));
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+        userRepository.save(user);
+        return true;
+    }
+
+    /**
+     * Сохранить пользователя
+     *
+     * @param user      - пользователь
+     * @param tusername - логин в телеграме
+     * @return флаг, получилось ли сохранить
+     */
+    public boolean saveUser(User user, String tusername) {
+        user.setTusername(tusername);
         userRepository.save(user);
         return true;
     }
