@@ -5,6 +5,8 @@ import com.example.demo.entities.User;
 import com.example.demo.repository.RoleRepository;
 import com.example.demo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -56,12 +58,25 @@ public class UserService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(username);
-
         if (user == null) {
             throw new UsernameNotFoundException("User not found");
         }
-
         return user;
+    }
+
+    /**
+     * Получить пользователя по его имени
+     *
+     * @param username - имя
+     * @return пользователь
+     * @throws UsernameNotFoundException - исключение, если пользователь не найден
+     */
+    public UserDetails loadUserByTUsername(String username) throws UsernameNotFoundException {
+        List<User> users = userRepository.findAllByTUsername(username);
+        if (users == null || users.isEmpty()) {
+            throw new UsernameNotFoundException("User not found");
+        }
+        return users.get(0);
     }
 
     /**

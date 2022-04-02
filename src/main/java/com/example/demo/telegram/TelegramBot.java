@@ -1,9 +1,14 @@
 package com.example.demo.telegram;
 
+import com.example.demo.entities.User;
+import com.example.demo.service.UserService;
+import com.example.demo.telegram.operations.RegularOperations;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.java.Log;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.telegram.telegrambots.bots.DefaultBotOptions;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -13,11 +18,14 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.starter.SpringWebhookBot;
 
+import static com.example.demo.telegram.BotState.STATE_START;
+
 /**
  * Класс телеграм-бота
  */
 @Getter
 @Setter
+@Log
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class TelegramBot extends SpringWebhookBot {
     /**
@@ -32,6 +40,15 @@ public class TelegramBot extends SpringWebhookBot {
      * Токен бота
      */
     String botToken;
+    /**
+     * Сервис для работы с пользователями
+     */
+    @Autowired
+    UserService userService;
+    @Autowired
+    RegularOperations regularOperations;
+
+    BotState botState = STATE_START;
 
     /**
      * Конструктор телеграм-бота
@@ -70,6 +87,13 @@ public class TelegramBot extends SpringWebhookBot {
             Message message = update.getMessage();
             // получаем имя пользователя
             String telegramUserName = message.getFrom().getFirstName();
+            try {
+                User u = (User) userService.loadUserByTUsername(telegramUserName);
+                log.info(u + "");
+            } catch (Exception e) {
+                log.info(e + "");
+            }
+            log.info(message.getText());
             // если у сообщения есть текст
             if (message.hasText()) {
                 // формируем ответ
@@ -77,11 +101,15 @@ public class TelegramBot extends SpringWebhookBot {
                 // переходим в чат с пользователем
                 sendMessage.setChatId(String.valueOf(message.getChatId()));
                 // задаём текст сообщения
-                sendMessage.setText("Привет, " + telegramUserName + "!\nВы написали:\n" + message.getText());
+                sendMessage.setText(switch (botState) {
+                    case STATE_START -> regularOperations.start(message);
+                });
                 // возвращаем ответное сообщение
                 return sendMessage;
             }
         }
         return null;
     }
+
+
 }

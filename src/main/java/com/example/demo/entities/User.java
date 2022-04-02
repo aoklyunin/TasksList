@@ -42,6 +42,10 @@ public class User implements UserDetails {
      * Пароль
      */
     private String password;
+    /**
+     * Имя телеграм пользователя
+     */
+    private String tusername;
 
     /**
      * Получить роли пользователя

@@ -37,13 +37,13 @@ public class AppConfig {
     /**
      * Бин телеграм-бота
      *
-     * @param setWebhook - бин связывания веб-хука
+     * @param setWebhook        - бин связывания веб-хука
      * @return бин телеграм-бота
      */
     @Bean
     public TelegramBot springWebhookBot(SetWebhook setWebhook) {
         // создаём бота
-        TelegramBot bot = new TelegramBot(setWebhook);
+        TelegramBot bot = new TelegramBot( setWebhook);
         // заполняем значениями его поля
         bot.setBotToken(botConfig.getBotToken());
         bot.setBotUsername(botConfig.getUserName());
