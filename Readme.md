@@ -1,6 +1,6 @@
-## Bootstrap Веб-Сервер
+## Телеграм бот
 
-Это пример простейшего веб-сервера на Java+Spring+Bootstrap.
+Это пример телеграм бота на Java+Spring+Bootstrap.
 
 
 ![cmd](src/main/resources/img/index.png)
