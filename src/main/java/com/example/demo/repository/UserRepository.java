@@ -18,6 +18,12 @@ public interface UserRepository extends JpaRepository<User, Long> {
      */
     User findByUsername(String username);
 
+    /**
+     * Получить всех пользователей по заданному имени пользователя в телеграмме
+     *
+     * @param tusername - имя пользователя в телеграмме
+     * @return список пользователей
+     */
     @Query("SELECT u FROM User u WHERE u.tusername= ?1")
     List<User> findAllByTUsername(String tusername);
 }

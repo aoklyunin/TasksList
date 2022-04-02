@@ -18,8 +18,6 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.starter.SpringWebhookBot;
 
-import static com.example.demo.telegram.BotState.STATE_START;
-
 /**
  * Класс телеграм-бота
  */
@@ -45,10 +43,15 @@ public class TelegramBot extends SpringWebhookBot {
      */
     @Autowired
     UserService userService;
+    /**
+     * Сервис обычных операций
+     */
     @Autowired
     RegularOperations regularOperations;
-
-    BotState botState = STATE_START;
+    /**
+     * Состояние бота
+     */
+    BotState botState;
 
     /**
      * Конструктор телеграм-бота
@@ -58,6 +61,7 @@ public class TelegramBot extends SpringWebhookBot {
      */
     public TelegramBot(DefaultBotOptions options, SetWebhook setWebhook) {
         super(options, setWebhook);
+        this.botState = BotState.STATE_START;
     }
 
     /**
@@ -67,6 +71,7 @@ public class TelegramBot extends SpringWebhookBot {
      */
     public TelegramBot(SetWebhook setWebhook) {
         super(setWebhook);
+        this.botState = BotState.STATE_START;
     }
 
     /**
