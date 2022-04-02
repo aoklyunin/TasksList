@@ -97,7 +97,8 @@ ALTER SEQUENCE public.tasks_table_id_seq OWNED BY public.tasks_table.id;
 CREATE TABLE public.user_table (
     id integer NOT NULL,
     password text,
-    username text
+    username text,
+    tusername text DEFAULT ''::text NOT NULL
 );
 
 
@@ -173,9 +174,14 @@ COPY public.role_table (id, name) FROM stdin;
 --
 
 COPY public.tasks_table (id, title, user_id, text) FROM stdin;
-5	Задача 1	4	тест 123 123
 6	A	7	a
 7	B	7	b
+5	Задача 1	4	тест 123 1
+8	A	4	a2
+14	Задача от бота	4	тестовая задача
+15	Задача от бота	4	тест
+16	Задача от бота	4	колбек
+17	Задача от бота	4	хероку
 \.
 
 
@@ -183,13 +189,13 @@ COPY public.tasks_table (id, title, user_id, text) FROM stdin;
 -- Data for Name: user_table; Type: TABLE DATA; Schema: public; Owner: bocxxkiemgufar
 --
 
-COPY public.user_table (id, password, username) FROM stdin;
-4	$2a$10$5OW.Tt3ZSIB7yuA1Eu9GtuiBFP0ejvmd4tbEjuIOE7XEfl6pjtP4W	u1
-5	$2a$10$QRDBLblN0gZlol4HjaxQe.RU2WDcwnEEOBPLT.ygXTdVtDA3HGBli	u2
-6	$2a$10$UAqc3p/uX8xpVSNiZpqsYOG/eR6uEXSRRkBghkAk0voHxV17y4FKq	u3
-7	$2a$10$/0IhWFT/TFP3mj4rXaJ2keWCtJueRV8bByZceYj4FzMqU1VRoDNVW	u4
-8	$2a$10$UaU39H6HqW0SBVRk/Q2NhuYo41tEts/h6VWc9zBiHZNZzG9k2BJyu	u5
-9	$2a$10$W7S0vOg10goBDRHdHw/wu.XpylCMVS.GTFfatnptvlFPdv42F8WMO	u6
+COPY public.user_table (id, password, username, tusername) FROM stdin;
+5	$2a$10$QRDBLblN0gZlol4HjaxQe.RU2WDcwnEEOBPLT.ygXTdVtDA3HGBli	u2	
+6	$2a$10$UAqc3p/uX8xpVSNiZpqsYOG/eR6uEXSRRkBghkAk0voHxV17y4FKq	u3	
+7	$2a$10$/0IhWFT/TFP3mj4rXaJ2keWCtJueRV8bByZceYj4FzMqU1VRoDNVW	u4	
+8	$2a$10$UaU39H6HqW0SBVRk/Q2NhuYo41tEts/h6VWc9zBiHZNZzG9k2BJyu	u5	
+9	$2a$10$W7S0vOg10goBDRHdHw/wu.XpylCMVS.GTFfatnptvlFPdv42F8WMO	u6	
+4	$2a$10$5OW.Tt3ZSIB7yuA1Eu9GtuiBFP0ejvmd4tbEjuIOE7XEfl6pjtP4W	u1	astakhanov
 \.
 
 
@@ -218,7 +224,7 @@ SELECT pg_catalog.setval('public.role_table_id_seq', 1, false);
 -- Name: tasks_table_id_seq; Type: SEQUENCE SET; Schema: public; Owner: bocxxkiemgufar
 --
 
-SELECT pg_catalog.setval('public.tasks_table_id_seq', 7, true);
+SELECT pg_catalog.setval('public.tasks_table_id_seq', 17, true);
 
 
 --
