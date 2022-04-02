@@ -1,6 +1,5 @@
 package com.example.demo.telegram;
 
-import com.example.demo.entities.Role;
 import com.example.demo.entities.User;
 import com.example.demo.service.UserService;
 import com.example.demo.telegram.operations.RegularOperations;
@@ -31,11 +30,28 @@ public class TelegramBot extends SpringWebhookBot {
     /**
      * Команда старта
      */
-    private static final String COMMAND_ADD_TASK = "/addTask";
+    public static final String COMMAND_ADD_TASK = "/addTask";
     /**
      * Команда старта
      */
-    private static final String COMMAND_LIST_TASK = "/listTask";
+    public static final String COMMAND_LIST_TASK = "/listTask";
+    /**
+     * Текст кнопки добавления
+     */
+    public static final String BTN_ADD_TASK_TEXT = "Добавить";
+    /**
+     * Текст кнопки списка
+     */
+    public static final String BTN_LIST_TASK_TEXT = "Список";
+    /**
+     * Название для обработки колбека кнопки добавления
+     */
+    public static final String BTN_ADD_TASK_CALLBACK_NAME = "addTaskBtn";
+    /**
+     * Название для обработки колбека кнопки списка
+     */
+    public static final String BTN_LIST_TASK_CALLBACK_NAME = "listTaskBtn";
+
     /**
      * Пусть к боту
      */
@@ -104,9 +120,23 @@ public class TelegramBot extends SpringWebhookBot {
     public BotApiMethod<?> onWebhookUpdateReceived(Update update) {
         // Если в запросе есть `Callback`
         if (update.hasCallbackQuery()) {
-            // пока что просто получаем его объект
+            // получаем его объект
             CallbackQuery callbackQuery = update.getCallbackQuery();
-            return null;
+            String data = callbackQuery.getData();
+            // формируем ответ
+            SendMessage sendMessage = new SendMessage();
+            // получаем сообщение
+            Message message = callbackQuery.getMessage();
+            // переходим в чат с пользователем
+            sendMessage.setChatId(String.valueOf(message.getChatId()));
+            // задаём текст сообщения
+            sendMessage.setText(switch (data) {
+                case BTN_ADD_TASK_CALLBACK_NAME -> doWaitForTask();
+                case BTN_LIST_TASK_CALLBACK_NAME -> regularOperations.listTask(connectedUser);
+                default -> regularOperations.hello(message, sendMessage);
+            });
+            // возвращаем ответное сообщение
+            return sendMessage;
         } else {
             // получаем сообщение
             Message message = update.getMessage();
@@ -118,10 +148,10 @@ public class TelegramBot extends SpringWebhookBot {
                 sendMessage.setChatId(String.valueOf(message.getChatId()));
                 // задаём текст сообщения
                 sendMessage.setText(switch (botState) {
-                    case STATE_START -> processStart(message);
+                    case STATE_START -> processStart(message, sendMessage);
                     case STATE_WAIT_FOR_USERNAME -> waitForUsername(message);
-                    case STATE_WAIT_FOR_PASSWORD -> waitForPassword(message);
-                    case STATE_CONNECTED -> processConnected(message);
+                    case STATE_WAIT_FOR_PASSWORD -> waitForPassword(message, sendMessage);
+                    case STATE_CONNECTED -> processConnected(message, sendMessage);
                     case STATE_WAIT_FOR_TASK -> waitForTask(message);
                 });
                 // возвращаем ответное сообщение
@@ -137,13 +167,14 @@ public class TelegramBot extends SpringWebhookBot {
      * @param message - сообщение
      * @return ответ
      */
-    private String processStart(Message message) {
+    private String processStart(Message message, SendMessage sendMessage) {
         try {
             // пытаемся найти сохранённого пользователя в базе
             connectedUser = (User) userService.loadUserByTUsername(message.getFrom().getUserName());
             botState = BotState.STATE_CONNECTED;
+            regularOperations.showReplyMenu(sendMessage);
             return "Здравствуйте, " + message.getFrom().getFirstName() + ".\n" +
-                    "Ваш логин в системе " + connectedUser.getUsername()    ;
+                    "Ваш логин в системе " + connectedUser.getUsername();
         } catch (Exception e) {
             log.info(e.getMessage());
             botState = BotState.STATE_WAIT_FOR_USERNAME;
@@ -174,13 +205,14 @@ public class TelegramBot extends SpringWebhookBot {
      * @param message - сообщение
      * @return ответ
      */
-    private String waitForPassword(Message message) {
+    private String waitForPassword(Message message, SendMessage sendMessage) {
         if (connectedUser == null)
             return "Ошибка: пользователь не найден";
         // если пароли совпадают
         if (bCryptPasswordEncoder.matches(message.getText(), connectedUser.getPassword())) {
             log.info(userService.saveUser(connectedUser, message.getFrom().getUserName()) + "");
             botState = BotState.STATE_CONNECTED;
+            regularOperations.showReplyMenu(sendMessage);
             return "Связывание выполнено";
         } else {
             return "Неверный пароль";
@@ -193,11 +225,11 @@ public class TelegramBot extends SpringWebhookBot {
      * @param message - сообщение
      * @return ответ
      */
-    private String processConnected(Message message) {
+    private String processConnected(Message message, SendMessage sendMessage) {
         return switch (message.getText()) {
             case COMMAND_ADD_TASK -> doWaitForTask();
             case COMMAND_LIST_TASK -> regularOperations.listTask(connectedUser);
-            default -> regularOperations.hello(message);
+            default -> regularOperations.hello(message, sendMessage);
         };
     }
 
@@ -213,7 +245,6 @@ public class TelegramBot extends SpringWebhookBot {
         botState = BotState.STATE_CONNECTED;
         return "Задача добавлена";
     }
-
 
 
     /**
