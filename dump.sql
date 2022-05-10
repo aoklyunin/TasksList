@@ -21,7 +21,7 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
--- Name: role_table; Type: TABLE; Schema: public; Owner: bocxxkiemgufar
+-- Name: role_table; Type: TABLE; Schema: public; Owner: sncnfigdbdpmul
 --
 
 CREATE TABLE public.role_table (
@@ -30,10 +30,10 @@ CREATE TABLE public.role_table (
 );
 
 
-ALTER TABLE public.role_table OWNER TO bocxxkiemgufar;
+ALTER TABLE public.role_table OWNER TO sncnfigdbdpmul;
 
 --
--- Name: role_table_id_seq; Type: SEQUENCE; Schema: public; Owner: bocxxkiemgufar
+-- Name: role_table_id_seq; Type: SEQUENCE; Schema: public; Owner: sncnfigdbdpmul
 --
 
 CREATE SEQUENCE public.role_table_id_seq
@@ -45,17 +45,17 @@ CREATE SEQUENCE public.role_table_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.role_table_id_seq OWNER TO bocxxkiemgufar;
+ALTER TABLE public.role_table_id_seq OWNER TO sncnfigdbdpmul;
 
 --
--- Name: role_table_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bocxxkiemgufar
+-- Name: role_table_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: sncnfigdbdpmul
 --
 
 ALTER SEQUENCE public.role_table_id_seq OWNED BY public.role_table.id;
 
 
 --
--- Name: tasks_table; Type: TABLE; Schema: public; Owner: bocxxkiemgufar
+-- Name: tasks_table; Type: TABLE; Schema: public; Owner: sncnfigdbdpmul
 --
 
 CREATE TABLE public.tasks_table (
@@ -66,10 +66,10 @@ CREATE TABLE public.tasks_table (
 );
 
 
-ALTER TABLE public.tasks_table OWNER TO bocxxkiemgufar;
+ALTER TABLE public.tasks_table OWNER TO sncnfigdbdpmul;
 
 --
--- Name: tasks_table_id_seq; Type: SEQUENCE; Schema: public; Owner: bocxxkiemgufar
+-- Name: tasks_table_id_seq; Type: SEQUENCE; Schema: public; Owner: sncnfigdbdpmul
 --
 
 CREATE SEQUENCE public.tasks_table_id_seq
@@ -81,17 +81,17 @@ CREATE SEQUENCE public.tasks_table_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.tasks_table_id_seq OWNER TO bocxxkiemgufar;
+ALTER TABLE public.tasks_table_id_seq OWNER TO sncnfigdbdpmul;
 
 --
--- Name: tasks_table_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bocxxkiemgufar
+-- Name: tasks_table_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: sncnfigdbdpmul
 --
 
 ALTER SEQUENCE public.tasks_table_id_seq OWNED BY public.tasks_table.id;
 
 
 --
--- Name: user_table; Type: TABLE; Schema: public; Owner: bocxxkiemgufar
+-- Name: user_table; Type: TABLE; Schema: public; Owner: sncnfigdbdpmul
 --
 
 CREATE TABLE public.user_table (
@@ -102,10 +102,10 @@ CREATE TABLE public.user_table (
 );
 
 
-ALTER TABLE public.user_table OWNER TO bocxxkiemgufar;
+ALTER TABLE public.user_table OWNER TO sncnfigdbdpmul;
 
 --
--- Name: user_table_id_seq; Type: SEQUENCE; Schema: public; Owner: bocxxkiemgufar
+-- Name: user_table_id_seq; Type: SEQUENCE; Schema: public; Owner: sncnfigdbdpmul
 --
 
 CREATE SEQUENCE public.user_table_id_seq
@@ -117,17 +117,17 @@ CREATE SEQUENCE public.user_table_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.user_table_id_seq OWNER TO bocxxkiemgufar;
+ALTER TABLE public.user_table_id_seq OWNER TO sncnfigdbdpmul;
 
 --
--- Name: user_table_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bocxxkiemgufar
+-- Name: user_table_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: sncnfigdbdpmul
 --
 
 ALTER SEQUENCE public.user_table_id_seq OWNED BY public.user_table.id;
 
 
 --
--- Name: user_table_roles; Type: TABLE; Schema: public; Owner: bocxxkiemgufar
+-- Name: user_table_roles; Type: TABLE; Schema: public; Owner: sncnfigdbdpmul
 --
 
 CREATE TABLE public.user_table_roles (
@@ -136,31 +136,31 @@ CREATE TABLE public.user_table_roles (
 );
 
 
-ALTER TABLE public.user_table_roles OWNER TO bocxxkiemgufar;
+ALTER TABLE public.user_table_roles OWNER TO sncnfigdbdpmul;
 
 --
--- Name: role_table id; Type: DEFAULT; Schema: public; Owner: bocxxkiemgufar
+-- Name: role_table id; Type: DEFAULT; Schema: public; Owner: sncnfigdbdpmul
 --
 
 ALTER TABLE ONLY public.role_table ALTER COLUMN id SET DEFAULT nextval('public.role_table_id_seq'::regclass);
 
 
 --
--- Name: tasks_table id; Type: DEFAULT; Schema: public; Owner: bocxxkiemgufar
+-- Name: tasks_table id; Type: DEFAULT; Schema: public; Owner: sncnfigdbdpmul
 --
 
 ALTER TABLE ONLY public.tasks_table ALTER COLUMN id SET DEFAULT nextval('public.tasks_table_id_seq'::regclass);
 
 
 --
--- Name: user_table id; Type: DEFAULT; Schema: public; Owner: bocxxkiemgufar
+-- Name: user_table id; Type: DEFAULT; Schema: public; Owner: sncnfigdbdpmul
 --
 
 ALTER TABLE ONLY public.user_table ALTER COLUMN id SET DEFAULT nextval('public.user_table_id_seq'::regclass);
 
 
 --
--- Data for Name: role_table; Type: TABLE DATA; Schema: public; Owner: bocxxkiemgufar
+-- Data for Name: role_table; Type: TABLE DATA; Schema: public; Owner: sncnfigdbdpmul
 --
 
 INSERT INTO public.role_table (id, name) VALUES (1, 'ROLE_USER');
@@ -168,7 +168,7 @@ INSERT INTO public.role_table (id, name) VALUES (2, 'ROLE_ADMIN');
 
 
 --
--- Data for Name: tasks_table; Type: TABLE DATA; Schema: public; Owner: bocxxkiemgufar
+-- Data for Name: tasks_table; Type: TABLE DATA; Schema: public; Owner: sncnfigdbdpmul
 --
 
 INSERT INTO public.tasks_table (id, title, user_id, text) VALUES (6, 'A', 7, 'a');
@@ -183,7 +183,7 @@ INSERT INTO public.tasks_table (id, title, user_id, text) VALUES (18, 'Зада�
 
 
 --
--- Data for Name: user_table; Type: TABLE DATA; Schema: public; Owner: bocxxkiemgufar
+-- Data for Name: user_table; Type: TABLE DATA; Schema: public; Owner: sncnfigdbdpmul
 --
 
 INSERT INTO public.user_table (id, password, username, tusername) VALUES (5, '$2a$10$QRDBLblN0gZlol4HjaxQe.RU2WDcwnEEOBPLT.ygXTdVtDA3HGBli', 'u2', '');
@@ -195,7 +195,7 @@ INSERT INTO public.user_table (id, password, username, tusername) VALUES (4, '$2
 
 
 --
--- Data for Name: user_table_roles; Type: TABLE DATA; Schema: public; Owner: bocxxkiemgufar
+-- Data for Name: user_table_roles; Type: TABLE DATA; Schema: public; Owner: sncnfigdbdpmul
 --
 
 INSERT INTO public.user_table_roles (user_id, roles_id) VALUES (4, 1);
@@ -207,28 +207,28 @@ INSERT INTO public.user_table_roles (user_id, roles_id) VALUES (9, 2);
 
 
 --
--- Name: role_table_id_seq; Type: SEQUENCE SET; Schema: public; Owner: bocxxkiemgufar
+-- Name: role_table_id_seq; Type: SEQUENCE SET; Schema: public; Owner: sncnfigdbdpmul
 --
 
 SELECT pg_catalog.setval('public.role_table_id_seq', 1, false);
 
 
 --
--- Name: tasks_table_id_seq; Type: SEQUENCE SET; Schema: public; Owner: bocxxkiemgufar
+-- Name: tasks_table_id_seq; Type: SEQUENCE SET; Schema: public; Owner: sncnfigdbdpmul
 --
 
 SELECT pg_catalog.setval('public.tasks_table_id_seq', 18, true);
 
 
 --
--- Name: user_table_id_seq; Type: SEQUENCE SET; Schema: public; Owner: bocxxkiemgufar
+-- Name: user_table_id_seq; Type: SEQUENCE SET; Schema: public; Owner: sncnfigdbdpmul
 --
 
 SELECT pg_catalog.setval('public.user_table_id_seq', 9, true);
 
 
 --
--- Name: role_table role_table_pk; Type: CONSTRAINT; Schema: public; Owner: bocxxkiemgufar
+-- Name: role_table role_table_pk; Type: CONSTRAINT; Schema: public; Owner: sncnfigdbdpmul
 --
 
 ALTER TABLE ONLY public.role_table
@@ -236,7 +236,7 @@ ALTER TABLE ONLY public.role_table
 
 
 --
--- Name: tasks_table tasks_table_pk; Type: CONSTRAINT; Schema: public; Owner: bocxxkiemgufar
+-- Name: tasks_table tasks_table_pk; Type: CONSTRAINT; Schema: public; Owner: sncnfigdbdpmul
 --
 
 ALTER TABLE ONLY public.tasks_table
@@ -244,7 +244,7 @@ ALTER TABLE ONLY public.tasks_table
 
 
 --
--- Name: user_table user_table_pk; Type: CONSTRAINT; Schema: public; Owner: bocxxkiemgufar
+-- Name: user_table user_table_pk; Type: CONSTRAINT; Schema: public; Owner: sncnfigdbdpmul
 --
 
 ALTER TABLE ONLY public.user_table
@@ -252,33 +252,33 @@ ALTER TABLE ONLY public.user_table
 
 
 --
--- Name: role_table_id_uindex; Type: INDEX; Schema: public; Owner: bocxxkiemgufar
+-- Name: role_table_id_uindex; Type: INDEX; Schema: public; Owner: sncnfigdbdpmul
 --
 
 CREATE UNIQUE INDEX role_table_id_uindex ON public.role_table USING btree (id);
 
 
 --
--- Name: tasks_table_id_uindex; Type: INDEX; Schema: public; Owner: bocxxkiemgufar
+-- Name: tasks_table_id_uindex; Type: INDEX; Schema: public; Owner: sncnfigdbdpmul
 --
 
 CREATE UNIQUE INDEX tasks_table_id_uindex ON public.tasks_table USING btree (id);
 
 
 --
--- Name: user_table_id_uindex; Type: INDEX; Schema: public; Owner: bocxxkiemgufar
+-- Name: user_table_id_uindex; Type: INDEX; Schema: public; Owner: sncnfigdbdpmul
 --
 
 CREATE UNIQUE INDEX user_table_id_uindex ON public.user_table USING btree (id);
 
 
 --
--- Name: SCHEMA public; Type: ACL; Schema: -; Owner: bocxxkiemgufar
+-- Name: SCHEMA public; Type: ACL; Schema: -; Owner: sncnfigdbdpmul
 --
 
 REVOKE ALL ON SCHEMA public FROM postgres;
 REVOKE ALL ON SCHEMA public FROM PUBLIC;
-GRANT ALL ON SCHEMA public TO bocxxkiemgufar;
+GRANT ALL ON SCHEMA public TO sncnfigdbdpmul;
 GRANT ALL ON SCHEMA public TO PUBLIC;
 
 
@@ -286,7 +286,7 @@ GRANT ALL ON SCHEMA public TO PUBLIC;
 -- Name: LANGUAGE plpgsql; Type: ACL; Schema: -; Owner: postgres
 --
 
-GRANT ALL ON LANGUAGE plpgsql TO bocxxkiemgufar;
+GRANT ALL ON LANGUAGE plpgsql TO sncnfigdbdpmul;
 
 
 --
